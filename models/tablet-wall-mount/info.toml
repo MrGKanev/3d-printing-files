@@ -1,0 +1,16 @@
+name = "Tablet wall mount"
+summary = "Samsung Galaxy Tab A11 (8.7\"), landscape. The tablet slides in from the top and lifts out freely. The USB-C cable runs behind the plate and exits on the right."
+status = "draft"            # draft | ready to print | printed | done
+printer = "Elegoo Centauri Carbon"
+material = "PETG"
+layer_height = "0.20 mm"
+walls = 4
+infill = "15% gyroid"
+supports = "none"
+orientation = "back side down (the cable channel faces the bed)"
+notes = [
+  "Tablet dimensions 211 x 124.7 x 8 mm (spec sheet). Measure yours (case?) and adjust the parameters in model.py.",
+  "The USB-C port position is ASSUMED at the center of the short side - verify it and tune port_off.",
+  "The top edge is fully open and the tablet sticks out 30 mm (grab), so the power/volume buttons stay free. Raise grab for more room.",
+  "A right-angle USB-C plug is recommended. Mount with 4 screws (~4 mm) through the countersunk holes.",
+]
