@@ -1,5 +1,5 @@
 name = "Tablet wall mount"
-summary = "Samsung Galaxy Tab A11 (8.7\"), landscape. The tablet slides in from the top and lifts out freely. The USB-C cable runs behind the plate and exits on the right."
+summary = "Samsung Galaxy Tab A11 (8.7\"), landscape. Two-part wall mount: plate + press-fit cover (no small screws). The USB-C cable runs through the plate and out a channel on the back. Extra room around the power/volume buttons."
 status = "draft"            # draft | ready to print | printed | done
 printer = "Elegoo Centauri Carbon"
 material = "PETG"
@@ -7,10 +7,12 @@ layer_height = "0.20 mm"
 walls = 4
 infill = "15% gyroid"
 supports = "none"
-orientation = "back side down (the cable channel faces the bed)"
+orientation = "plate: back side down (cable channel on the bed); cover: outer face down (already flipped in the STL)"
+license = "CC BY-NC-SA 4.0"
+credit = "Concept after \"Samsung Galaxy Tab A11 Wall Mount / Tablet Holder\" by Maakloods (https://www.printables.com/model/1501242), CC BY-NC-SA 4.0. Geometry is original."
+hardware = ["4x countersunk wall screws (~4 mm) + anchors for your wall type"]
 notes = [
   "Tablet dimensions 211 x 124.7 x 8 mm (spec sheet). Measure yours (case?) and adjust the parameters in model.py.",
-  "The USB-C port position is ASSUMED at the center of the short side - verify it and tune port_off.",
-  "The top edge is fully open and the tablet sticks out 30 mm (grab), so the power/volume buttons stay free. Raise grab for more room.",
-  "A right-angle USB-C plug is recommended. Mount with 4 screws (~4 mm) through the countersunk holes.",
+  "ASSUMED, verify: USB-C is at the center of the right edge (port_off) and the buttons sit within 8-90 mm of the top edge's left end (btn_x0/btn_x1). Both are generous cutouts.",
+  "The cover is held by 4 split pins pressed into the plate; pry it off at the button cutout. Print a test fit first and tune pin_d (too loose: +0.1, too tight: -0.1). A right-angle USB-C plug is recommended.",
 ]
