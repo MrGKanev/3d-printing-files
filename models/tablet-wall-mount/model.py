@@ -18,7 +18,8 @@ plate_t = 5.0      # back plate thickness
 cover_t = 3.0      # front cover thickness
 lip = 6.0          # how much of the screen bezel the cover overlaps
 m = 16.0           # margin from the tablet pocket to the outer edge (screws, cable slot)
-btn_x0, btn_x1 = 8.0, 90.0  # button zone on the top edge, measured from the left tablet edge - VERIFY
+btn_x0, btn_x1 = 15.0, 65.0  # button zone on the top edge, measured from the left tablet edge - VERIFY
+btn_depth = 3.0     # how far the cover cutout reaches past the tablet's top edge
 port_off = 0.0     # USB-C offset from the center of the right edge (+ up) - VERIFY
 port_gap = 22.0    # rim opening height for the plug
 groove_w, groove_d = 7.0, 3.0  # cable channel on the back
@@ -86,7 +87,7 @@ hex_fill(sx0, sx1, port_y + sy, PH - 8 - boss_d / 2 - 3, hex_r_side, hex_rib_sid
 # --- cover (built outer face up, then flipped: outer face on the bed, pins up) ---
 cover = box(0, 0, 0, PW, PH, cover_t)
 cover -= box(m + lip, m + lip, -1, right - lip, top - lip, cover_t + 1)                   # screen window
-cover -= box(m + btn_x0, top - 1, -1, m + btn_x1, PH + 1, cover_t + 1)                    # button access
+cover -= box(m + btn_x0, top - 1, -1, m + btn_x1, top + btn_depth, cover_t + 1)                    # button access
 for x, y in corners:   # split pins on the underside
     cover += Pos(x, y, -pin_l) * Cylinder(pin_d / 2, pin_l, align=CEN) \
         - box(x - pin_d, y - pin_slit / 2, -pin_l - 1, x + pin_d, y + pin_slit / 2, -1.5)
