@@ -10,13 +10,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ORCA = "/Applications/OrcaSlicer.app/Contents/MacOS/OrcaSlicer"
-SYS = Path.home() / "Library/Application Support/OrcaSlicer/system/Elegoo"
+SYS = Path.home() / "Library/Application Support/ElegooSlicer/system/Elegoo"  # unpacked Elegoo profiles (OrcaSlicer packs its own copy into .opc)
 SETTINGS = f"{SYS}/machine/ECC/Elegoo Centauri Carbon 0.4 nozzle.json;{SYS}/process/ECC/0.20mm Strength @Elegoo CC 0.4 nozzle.json"
 FILAMENT = f"{SYS}/filament/ECC/Elegoo PETG @ECC.json"
 
-for stl in sorted((ROOT / "models").glob("*/*.stl")):
+for stl in sorted((ROOT / "models").glob("*/*-*.stl")):
     out = Path(tempfile.mkdtemp())  # Orca writes the 3mf, gcode and stats here
-    subprocess.run([ORCA, "--arrange", "1", "--slice", "0", "--wall-loops", "4", "--sparse-infill-density", "15%",
+    subprocess.run([ORCA, "--arrange", "1", "--slice", "0", "--curr-bed-type", "Textured PEI Plate", "--wall-loops", "4", "--sparse-infill-density", "15%",
                     "--sparse-infill-pattern", "gyroid", "--export-statistics", "--load-settings", SETTINGS,
                     "--load-filaments", FILAMENT, "--outputdir", str(out), "--export-3mf", stl.with_suffix(".3mf").name,
                     str(stl)], check=True, capture_output=True)

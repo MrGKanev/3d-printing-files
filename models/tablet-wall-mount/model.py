@@ -6,7 +6,7 @@ a channel on the back. Remove the tablet by prying the cover off.
 Concept after "Samsung Galaxy Tab A11 Wall Mount" by Maakloods (Printables 1501242, CC BY-NC-SA 4.0).
 Orientation: rotate the tablet so the USB-C port is on the right; the power/volume buttons end up on top.
 """
-from math import sqrt
+from math import hypot, sqrt
 
 from build123d import Align, Box, Cone, Cylinder, Pos, RegularPolygon, Rot, extrude
 
@@ -19,12 +19,14 @@ cover_t = 3.0      # front cover thickness
 lip = 6.0          # how much of the screen bezel the cover overlaps
 m = 16.0           # margin from the tablet pocket to the outer edge (screws, cable slot)
 btn_x0, btn_x1 = 15.0, 65.0  # button zone on the top edge, measured from the left tablet edge - VERIFY
-btn_depth = 3.0     # how far the cover cutout reaches past the tablet's top edge
+rcam_x, rcam_top, rcam_d = 19.5, 15.45, 16.0  # rear camera hole (from the reference plate): from the left tablet edge, from the top edge, diameter
+cam_len = 26.0      # front camera cutout in the left lip, centered on the left edge - VERIFY
+btn_depth = 3.0     # cover strip kept past the tablet's top edge; the cutout opens from there to the outer edge
 port_off = 0.0     # USB-C offset from the center of the right edge (+ up) - VERIFY
 port_gap = 22.0    # rim opening height for the plug
 groove_w, groove_d = 7.0, 3.0  # cable channel on the back
 slot_w = 9.0
-hex_r, hex_rib, hex_edge = 13.0, 3.0, 8.0  # lightening hex cutouts: cell radius, rib width, border kept around the pocket
+hex_r, hex_rib, hex_edge = 13.0, 3.0, 5.0  # lightening hex cutouts: cell radius, rib width, border kept around the pocket
 hex_r_side, hex_rib_side = 4.5, 2.5  # smaller hexes for the strip right of the tablet
 wall_screw, wall_head = 4.2, 8.6  # countersunk wall screws
 hole_d, hole_depth, boss_d = 4.2, 8.0, 10.0  # pin sockets in the plate bosses
@@ -57,6 +59,7 @@ for x, y in corners:
 plate -= box(right - 1, port_y - port_gap / 2, plate_t, right + rim_t + 1, port_y + port_gap / 2, plate_t + rim_h + 1)  # plug opening
 plate -= box(m + btn_x0, top - 1, plate_t, m + btn_x1, top + rim_t + 1, plate_t + rim_h + 1)  # button access
 slot_x = right + rim_t + 2 + slot_w / 2
+rcam_cx, rcam_cy = m + clr + rcam_x, top - clr - rcam_top
 plate -= box(slot_x - slot_w / 2, port_y - slot_w / 2, -1, slot_x + slot_w / 2, port_y + slot_w / 2, plate_t + 1)
 plate -= box(slot_x, port_y - groove_w / 2, -1, PW + 1, port_y + groove_w / 2, groove_d)
 for fx in (0.25, 0.75):
@@ -72,12 +75,14 @@ def hex_fill(x0, x1, y0, y1, r, rib):
     while cx + r <= x1:
         cy = y0 + apo + (pitch / 2 if col % 2 else 0)
         while cy + apo <= y1:
-            plate -= Pos(cx, cy, -1) * extrude(RegularPolygon(r, 6), plate_t + 2)
+            if hypot(cx - rcam_cx, cy - rcam_cy) >= rcam_d / 2 + r + rib:   # keep clear of the camera hole
+                plate -= Pos(cx, cy, -1) * extrude(RegularPolygon(r, 6), plate_t + 2)
             cy += pitch
         cx += pitch * sqrt(3) / 2
         col += 1
 
 
+plate -= Pos(rcam_cx, rcam_cy, -1) * Cylinder(rcam_d / 2, plate_t + 2, align=CEN)   # rear camera
 hex_fill(m + hex_edge, right - hex_edge, m + hex_edge, top - hex_edge, hex_r, hex_rib)  # under the tablet
 sx0, sx1 = right + rim_t + 1.5, PW - 1.5                  # strip to the right of the tablet
 sy = slot_w / 2 + groove_w / 2 + 2                        # keep clear of the cable slot/channel
@@ -87,7 +92,8 @@ hex_fill(sx0, sx1, port_y + sy, PH - 8 - boss_d / 2 - 3, hex_r_side, hex_rib_sid
 # --- cover (built outer face up, then flipped: outer face on the bed, pins up) ---
 cover = box(0, 0, 0, PW, PH, cover_t)
 cover -= box(m + lip, m + lip, -1, right - lip, top - lip, cover_t + 1)                   # screen window
-cover -= box(m + btn_x0, top - 1, -1, m + btn_x1, top + btn_depth, cover_t + 1)                    # button access
+cover -= box(m + btn_x0, top + btn_depth, -1, m + btn_x1, PH + 1, cover_t + 1)                    # button access
+cover -= box(m, m + inner_h / 2 - cam_len / 2, -1, m + lip + 1, m + inner_h / 2 + cam_len / 2, cover_t + 1)  # front camera
 for x, y in corners:   # split pins on the underside
     cover += Pos(x, y, -pin_l) * Cylinder(pin_d / 2, pin_l, align=CEN) \
         - box(x - pin_d, y - pin_slit / 2, -pin_l - 1, x + pin_d, y + pin_slit / 2, -1.5)

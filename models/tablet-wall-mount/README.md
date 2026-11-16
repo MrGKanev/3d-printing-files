@@ -2,13 +2,13 @@
 
 Samsung Galaxy Tab A11 (8.7"), landscape. Two-part wall mount: plate + press-fit cover (no small screws). The USB-C cable runs through the plate and out a channel on the back. Extra room around the power/volume buttons.
 
-**Version:** 0.6 · **Status:** draft
+**Version:** 0.11 · **Status:** draft
 
 | | |
 |---|---|
 | Files | [`tablet-wall-mount-plate.stl`](tablet-wall-mount-plate.stl), [`tablet-wall-mount-cover.stl`](tablet-wall-mount-cover.stl) |
 | Size | plate 244 x 158 x 14; cover 244 x 158 x 10 mm |
-| Volume | 189.7 cm³ |
+| Volume | 182.5 cm³ |
 | Printer | Elegoo Centauri Carbon |
 | Material | PETG |
 | Layer height | 0.20 mm |
@@ -20,11 +20,17 @@ Samsung Galaxy Tab A11 (8.7"), landscape. Two-part wall mount: plate + press-fit
 | License | CC BY-NC-SA 4.0 |
 
 ## Notes
+- ASSUMED, verify: the front camera is centered on the left edge (cam_len = cutout length). The rear camera hole (rcam_x, rcam_top, rcam_d) is taken from a reference plate made for the same tablet.
 - Tablet dimensions 211 x 124.7 x 8 mm (spec sheet). Measure yours (case?) and adjust the parameters in model.py.
 - ASSUMED, verify: USB-C is at the center of the right edge (port_off) and the buttons sit within 15-65 mm of the top edge's left end (btn_x0/btn_x1). Both are generous cutouts.
 - The cover is held by 4 split pins pressed into the plate; pry it off at the button cutout. Print a test fit first and tune pin_d (too loose: +0.1, too tight: -0.1). A right-angle USB-C plug is recommended.
 
 ## Changelog
+- 0.11 - Rear camera hole (16 mm) in the plate, position taken from a reference plate; hex cells keep clear of it.
+- 0.10 - Front camera cutout (26 mm) in the cover lip on the left edge.
+- 0.9 - Hex grid border under the tablet reduced from 8 to 5 mm: one more column and more cells in the odd columns.
+- 0.8 - Button cutout moved to the outer edge of the cover: open outward, the screen bezel lip stays whole, only a 3 mm strip is kept past the tablet edge.
+- 0.7 - Button cutout is open to the screen window and reaches only 3 mm past the tablet edge (no floating hole).
 - 0.6 - Button cutout in the cover is only 3 mm deep (btn_depth) instead of cutting through the whole border.
 - 0.5 - Narrower button cutout (50 mm instead of 82 mm).
 - 0.4 - Small hex cutouts in the strip right of the tablet (above/below the cable channel).
