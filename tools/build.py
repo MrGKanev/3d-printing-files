@@ -18,8 +18,8 @@ Models for the **Elegoo Centauri Carbon** (Orca Slicer), made with [build123d](h
 
 ## Models
 
-| Model | Description | Material | Size (mm) | Status |
-|---|---|---|---|---|
+| Model | Version | Description | Material | Size (mm) | Status |
+|---|---|---|---|---|---|
 """
 FOOTER = """
 ## Usage
@@ -36,11 +36,12 @@ Open the `.stl` in Orca. The README files are generated - don't edit them by han
 
 def model_readme(info, files, sizes, vol):
     notes = "\n".join(f"- {n}" for n in info.get("notes", []))
+    changes = "\n".join(f"- {c}" for c in info.get("changelog", []))
     return f"""# {info['name']}
 
 {info['summary']}
 
-**Status:** {info['status']}
+**Version:** {info['version']} · **Status:** {info['status']}
 
 | | |
 |---|---|
@@ -59,6 +60,9 @@ def model_readme(info, files, sizes, vol):
 
 ## Notes
 {notes}
+
+## Changelog
+{changes}
 
 Credit: {info.get('credit', '-')}
 
@@ -84,7 +88,7 @@ for mdir in sorted((ROOT / "models").iterdir()):
         vol += part.volume
     files, sizes = ", ".join(files), "; ".join(sizes)
     (mdir / "README.md").write_text(model_readme(info, files, sizes, vol))
-    rows.append(f"| [{info['name']}](models/{mdir.name}/) | {info['summary']} | {info['material']} | {sizes} | {info['status']} |\n")
+    rows.append(f"| [{info['name']}](models/{mdir.name}/) | {info['version']} | {info['summary']} | {info['material']} | {sizes} | {info['status']} |\n")
     print(f"ok {mdir.name}: {sizes} mm, {vol / 1000:.1f} cm³")
 
 (ROOT / "README.md").write_text(HEADER + "".join(rows) + FOOTER)

@@ -4,9 +4,9 @@ Models for the **Elegoo Centauri Carbon** (Orca Slicer), made with [build123d](h
 
 ## Models
 
-| Model | Description | Material | Size (mm) | Status |
-|---|---|---|---|---|
-| [Tablet wall mount](models/tablet-wall-mount/) | Samsung Galaxy Tab A11 (8.7"), landscape. Two-part wall mount: plate + press-fit cover (no small screws). The USB-C cable runs through the plate and out a channel on the back. Extra room around the power/volume buttons. | PETG | plate 244 x 158 x 14; cover 244 x 158 x 10 | draft |
+| Model | Version | Description | Material | Size (mm) | Status |
+|---|---|---|---|---|---|
+| [Tablet wall mount](models/tablet-wall-mount/) | 0.4 | Samsung Galaxy Tab A11 (8.7"), landscape. Two-part wall mount: plate + press-fit cover (no small screws). The USB-C cable runs through the plate and out a channel on the back. Extra room around the power/volume buttons. | PETG | plate 244 x 158 x 14; cover 244 x 158 x 10 | draft |
 
 ## Usage
 

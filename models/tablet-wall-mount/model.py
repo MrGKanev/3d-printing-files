@@ -6,7 +6,9 @@ a channel on the back. Remove the tablet by prying the cover off.
 Concept after "Samsung Galaxy Tab A11 Wall Mount" by Maakloods (Printables 1501242, CC BY-NC-SA 4.0).
 Orientation: rotate the tablet so the USB-C port is on the right; the power/volume buttons end up on top.
 """
-from build123d import Align, Box, Cone, Cylinder, Pos, Rot
+from math import sqrt
+
+from build123d import Align, Box, Cone, Cylinder, Pos, RegularPolygon, Rot, extrude
 
 # --- parameters (mm) ---
 tab_w, tab_h, tab_t = 211.0, 124.7, 8.0  # Tab A11, landscape
@@ -21,6 +23,8 @@ port_off = 0.0     # USB-C offset from the center of the right edge (+ up) - VER
 port_gap = 22.0    # rim opening height for the plug
 groove_w, groove_d = 7.0, 3.0  # cable channel on the back
 slot_w = 9.0
+hex_r, hex_rib, hex_edge = 13.0, 3.0, 8.0  # lightening hex cutouts: cell radius, rib width, border kept around the pocket
+hex_r_side, hex_rib_side = 4.5, 2.5  # smaller hexes for the strip right of the tablet
 wall_screw, wall_head = 4.2, 8.6  # countersunk wall screws
 hole_d, hole_depth, boss_d = 4.2, 8.0, 10.0  # pin sockets in the plate bosses
 pin_d, pin_l, pin_slit = 4.4, 7.0, 1.0       # cover pins; tune pin_d for a snug fit
@@ -59,6 +63,25 @@ for fx in (0.25, 0.75):
         p = Pos(PW * fx, y, 0)
         plate -= p * Cylinder(wall_screw / 2, plate_t, align=CEN)
         plate -= p * Pos(0, 0, plate_t - (wall_head - wall_screw) / 2) * Cone(wall_screw / 2, wall_head / 2, (wall_head - wall_screw) / 2, align=CEN)
+
+# lightening: hex grids through the plate
+def hex_fill(x0, x1, y0, y1, r, rib):
+    global plate
+    pitch, apo, col, cx = sqrt(3) * r + rib, sqrt(3) / 2 * r, 0, x0 + r
+    while cx + r <= x1:
+        cy = y0 + apo + (pitch / 2 if col % 2 else 0)
+        while cy + apo <= y1:
+            plate -= Pos(cx, cy, -1) * extrude(RegularPolygon(r, 6), plate_t + 2)
+            cy += pitch
+        cx += pitch * sqrt(3) / 2
+        col += 1
+
+
+hex_fill(m + hex_edge, right - hex_edge, m + hex_edge, top - hex_edge, hex_r, hex_rib)  # under the tablet
+sx0, sx1 = right + rim_t + 1.5, PW - 1.5                  # strip to the right of the tablet
+sy = slot_w / 2 + groove_w / 2 + 2                        # keep clear of the cable slot/channel
+hex_fill(sx0, sx1, 8 + boss_d / 2 + 3, port_y - sy, hex_r_side, hex_rib_side)   # below the cable
+hex_fill(sx0, sx1, port_y + sy, PH - 8 - boss_d / 2 - 3, hex_r_side, hex_rib_side)  # above the cable
 
 # --- cover (built outer face up, then flipped: outer face on the bed, pins up) ---
 cover = box(0, 0, 0, PW, PH, cover_t)
